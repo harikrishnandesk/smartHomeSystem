@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 
 
-# Observer Pattern
+
 class Observer(ABC):
     @abstractmethod
     def update(self, message):
@@ -21,7 +21,6 @@ class Device(Observer):
         pass
 
 
-# Concrete Observers
 class Light(Device):
     def update(self, message):
         self.status = message
@@ -49,7 +48,6 @@ class DoorLock(Device):
         print(f"Door is {self.status}.")
 
 
-# Proxy Pattern
 class DeviceProxy:
     def __init__(self, real_device):
         self._real_device = real_device
@@ -59,7 +57,6 @@ class DeviceProxy:
         return getattr(self._real_device, attr)
 
 
-# Factory Method
 class DeviceFactory:
     def create_device(self, device_info):
         device_id = device_info['id']
@@ -73,7 +70,6 @@ class DeviceFactory:
             return DoorLock(device_id, device_type)
 
 
-# Smart Home System
 class SmartHomeSystem:
     def __init__(self):
         self.devices = []
@@ -126,7 +122,6 @@ class SmartHomeSystem:
         print(f"Automated Triggers: {json.dumps(self.triggers)}")
 
 
-# Client code
 if __name__ == "__main__":
     smart_home = SmartHomeSystem()
 
