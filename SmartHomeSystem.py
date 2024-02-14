@@ -3,7 +3,6 @@ from datetime import datetime
 import json
 
 
-
 class Observer(ABC):
     @abstractmethod
     def update(self, message):
@@ -125,22 +124,32 @@ class SmartHomeSystem:
 if __name__ == "__main__":
     smart_home = SmartHomeSystem()
 
-    devices_info = [
-        {'id': 1, 'type': 'light'},
-        {'id': 2, 'type': 'thermostat'},
-        {'id': 3, 'type': 'door'}
-    ]
+    while True:
+        print("\n1. Add Device\n2. Set Schedule\n3. Add Trigger\n4. Execute Tasks\n5. Display Status Report\n6. Exit")
+        choice = input("Enter your choice: ")
 
-    for device_info in devices_info:
-        smart_home.add_device(device_info)
-
-    smart_home.set_schedule(1, "06:00", "turnOn(1)")
-    smart_home.add_trigger("temperature > 75", {'device': 1, 'command': 'turnOff(1)'})
-
-    current_time = datetime.strptime("06:00", "%H:%M")
-    smart_home.execute_scheduled_tasks(current_time)
-
-    temperature_condition = 80
-    smart_home.execute_triggers(f"temperature == {temperature_condition}")
-
-    smart_home.display_status_report()
+        if choice == '1':
+            device_id = int(input("Enter device ID: "))
+            device_type = input("Enter device type (light/thermostat/door): ")
+            smart_home.add_device({'id': device_id, 'type': device_type})
+        elif choice == '2':
+            device_id = int(input("Enter device ID: "))
+            time = input("Enter time (HH:MM): ")
+            command = input("Enter command (turnOn or turnOff): ")
+            smart_home.set_schedule(device_id, time, f'{command}({device_id})')
+        elif choice == '3':
+            condition = input("Enter condition (e.g., temperature > 75): ")
+            device_id = int(input("Enter device ID for action: "))
+            action_command = input("Enter action command (turnOn or turnOff): ")
+            smart_home.add_trigger(condition, {'device': device_id, 'command': f'{action_command}({device_id})'})
+        elif choice == '4':
+            current_time_str = input("Enter current time (HH:MM): ")
+            current_time = datetime.strptime(current_time_str, "%H:%M")
+            smart_home.execute_scheduled_tasks(current_time)
+        elif choice == '5':
+            smart_home.display_status_report()
+        elif choice == '6':
+            print("Exiting the Smart Home System.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
